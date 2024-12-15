@@ -1,9 +1,10 @@
 from flask import Flask, request
 
 from audio_led_controller import AudioLedController
-from audioled.action_lights_audio_led import ActionLightsAudioLED
 from audioled.audio_led import AudioLED
 from audioled.audio_led_repository import AudioLEDRepository
+from audioled.capybara_audio_led import CapybaraAudioLED
+from audioled.action_lights_audio_led import ActionLightsAudioLED
 from audioled.balken_audio_led import BalkenAudioLED
 from vu_meter import VUMeter
 from wled.udpwled import UDPWLED
@@ -11,16 +12,21 @@ from wled.udpwled import UDPWLED
 app = Flask(__name__)
 
 audio_led_repository = AudioLEDRepository([
-    ActionLightsAudioLED(
-        name='action_lights',
-        display_name='Action lights',
-        wled=UDPWLED('10.43.60.238'),
+    CapybaraAudioLED(
+        name='capybara',
+        display_name='Capybara',
+        wled=UDPWLED('10.43.60.187'),
     ),
-    BalkenAudioLED(
-        name='balken',
-        display_name='Balken',
-        wled=UDPWLED('10.43.60.239'),
-    ),
+    # ActionLightsAudioLED(
+    #     name='action_lights',
+    #     display_name='Action lights',
+    #     wled=UDPWLED('10.43.60.238'),
+    # ),
+    # BalkenAudioLED(
+    #     name='balken',
+    #     display_name='Balken',
+    #     wled=UDPWLED('10.43.60.239'),
+    # ),
 ])
 
 vu_meter = VUMeter()
@@ -104,4 +110,4 @@ if __name__ == '__main__':
     vu_meter.start_audio_thread()
     audio_led_controller.start_led_thread()
 
-    app.run('0.0.0.0', 1337)
+    app.run('0.0.0.0', 1338)
